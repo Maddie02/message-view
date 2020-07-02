@@ -1,10 +1,10 @@
-package TestHello;
+package Hello;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TestHelloApplicationTests {
+class HelloApplicationTests {
 
 	@Test
 	void contextLoads() {
