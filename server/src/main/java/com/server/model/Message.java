@@ -1,7 +1,6 @@
 package com.server.model;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
