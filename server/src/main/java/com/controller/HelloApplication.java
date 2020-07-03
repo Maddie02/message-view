@@ -23,8 +23,13 @@ public class HelloApplication {
 	}
 
 	@GetMapping(value = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<User>> register() {
+	public ResponseEntity<List<User>> getUsers() {
 		return ResponseEntity.ok(repository.findAll());
+	}
+	
+	@GetMapping(value = "/createUser")
+	public void createUser(@RequestParam(value = "name", defaultValue = "Gosho") String name, @RequestParam(value = "pass", defaultValue = "Tosho") String pass){
+		repository.insert(new User(name, pass));
 	}
 
 
