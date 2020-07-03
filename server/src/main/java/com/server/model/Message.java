@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sun.corba.EncapsInputStreamFactory;
 
 @Document(collection = "messages_ALF")
 public class Message {
@@ -18,7 +19,7 @@ public class Message {
     private String text;
     private String version;
     private String messageType;
-    private String state;
+    private EntityState state;
     private boolean forDocumentation;
     private boolean forTranslation;
     private Object views;
@@ -27,7 +28,9 @@ public class Message {
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
 
-    public Message(String consistentMessageID, String consistentComponentID, String consistentProjectID, String messageID, String text, String version, String messageType, String state, boolean forDocumentation, boolean forTranslation, Object views, String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate) {
+    public Message(String consistentMessageID, String consistentComponentID, String consistentProjectID,
+        String messageID, String text, String version, String messageType, EntityState state, boolean forDocumentation,
+        boolean forTranslation, Object views, String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate) {
         this.consistentMessageID = consistentMessageID;
         this.consistentComponentID = consistentComponentID;
         this.consistentProjectID = consistentProjectID;
@@ -89,11 +92,11 @@ public class Message {
         this.messageType = messageType;
     }
 
-    public String getState() {
+    public EntityState getState() {
         return this.state;
     }
 
-    public void setState(String state) {
+    public void setState(EntityState state) {
         this.state = state;
     }
 
