@@ -1,6 +1,8 @@
 package com.server.model;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,15 +23,15 @@ public class Message {
     private EntityState state;
     private boolean forDocumentation;
     private boolean forTranslation;
-    private Object views;
     private String createdBy;
     private LocalDateTime createdDate;
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
+    private Map<String, MessageView> views;
 
     public Message(String consistentMessageID, String consistentComponentID, String consistentProjectID,
         String messageID, String text, String version, String messageType, EntityState state, boolean forDocumentation,
-        boolean forTranslation, Object views, String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate) {
+        boolean forTranslation, Map<String, MessageView> views, String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate) {
         this.consistentMessageID = consistentMessageID;
         this.consistentComponentID = consistentComponentID;
         this.consistentProjectID = consistentProjectID;
@@ -123,11 +125,11 @@ public class Message {
         this.forTranslation = forTranslation;
     }
 
-    public Object getViews() {
+    public Map<String, MessageView> getViews() {
         return this.views;
     }
 
-    public void setViews(Object views) {
+    public void setViews(Map<String, MessageView> views) {
         this.views = views;
     }
 
