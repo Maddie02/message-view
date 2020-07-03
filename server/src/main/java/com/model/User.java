@@ -1,12 +1,13 @@
 package com.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "user")
 public class User {
     @Id
-    private Long id;
+    private ObjectId id;
     private String username;
     private String password;
 
@@ -15,13 +16,7 @@ public class User {
         this.password = password;
     }
 
-    public User(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
@@ -33,11 +28,3 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-}
