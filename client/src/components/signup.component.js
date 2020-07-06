@@ -15,11 +15,13 @@ export default class SignUp extends Component {
                     <input type="password" name="password" className="form-control" placeholder="Enter password" />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
-                <p className="forgot-password text-right">
-                    Already registered <a href="#">log in?</a>
-                </p>
-            </form>
+                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                    <p className="forgot-password text-right">
+                        Already registered <a href="/">log in?</a>
+                    </p>
+                </form>
+                </div>
+            </div>
         );
     }
 }
