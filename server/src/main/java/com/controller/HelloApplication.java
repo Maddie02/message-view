@@ -26,7 +26,7 @@ public class HelloApplication {
 	}
 
 	@GetMapping(value = "/createUser")
-	public void createUser(@RequestParam(value = "name", defaultValue = "Gosho") String name, @RequestParam(value = "pass", defaultValue = "Tosho") String pass){
+	public void createUser(@RequestParam(value = "name", defaultValue = "Gosho") String name, @RequestParam(value = "pass", defaultValue = "Tosho") String pass) {
 		repository.insert(new User(name, pass));
 	}
 
@@ -40,6 +40,4 @@ public class HelloApplication {
 	public String register() {
 		return "register???";
 	}
-
-
 }
