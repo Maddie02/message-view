@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,13 +33,15 @@ public class HelloApplication {
 	}
 
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public boolean register(@RequestParam("username") String username, @RequestParam("password") String password) {
+	public void register(@RequestParam("username") String username, @RequestParam("password") String password,  HttpServletResponse response) {
 		repository.insert(new User(username, password));
-		return true;
+		response.setHeader("Location","http://localhost:3000");
+		response.setStatus(302);
 	}
 
 	@RequestMapping(value="/register", method = RequestMethod.GET)
-	public String register() {
-		return "register???";
+	public void register(HttpServletResponse response) {
+		response.setHeader("Location","http://localhost:3000/sign-up");
+		response.setStatus(302);
 	}
 }
