@@ -1,9 +1,9 @@
-package com.server.controller;
+package com.controller;
 
 import java.util.List;
 
-import com.server.model.Message;
-import com.server.repository.MessageRepository;
+import com.model.Message;
+import com.repository.MessageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
