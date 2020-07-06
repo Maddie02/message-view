@@ -1,4 +1,4 @@
-package com.server.model;
+package com.model;
 
 public enum EntityState {
     NEW("new"),

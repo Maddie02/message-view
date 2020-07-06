@@ -1,4 +1,4 @@
-package com.server.model;
+package com.model;
 
 import java.time.LocalDateTime;
 import java.util.Map;

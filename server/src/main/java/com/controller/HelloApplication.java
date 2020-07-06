@@ -1,4 +1,4 @@
-package com.conroller;
+package com.controller;
 
 import com.model.User;
 import com.repository.UserRepo;
