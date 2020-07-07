@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import CardActions from '@material-ui/core/CardActions';
 import axios from 'axios';
 import './Messages.css';
 
 const Message = props => {
+
     return (
         <Grid item component={Card} xs={12} md={3} sm={6} className="card">
             <CardContent>
@@ -14,6 +17,11 @@ const Message = props => {
                     {props.message.text}
                 </Typography>
             </CardContent>
+            <CardActions>
+                <span className="btn btn-default">
+                    <Link to={`/message/${props.message.id}`}>View</Link>
+                </span>
+            </CardActions>
         </Grid>
     );
 }

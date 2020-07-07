@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     return (
+        <div>
         <nav className="navbar navbar-expand-lg navbar-light fixed-top">
             <div className="container">
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -15,12 +16,17 @@ const Navbar = () => {
                         <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
                     </li>
                     <li className="nav-item">
+                        <Link className="nav-link" to={"/users"}>Users</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link className="nav-link" to={"/messages"}>Messages</Link>
                     </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <br />
+        </div>
     )
 }
 
