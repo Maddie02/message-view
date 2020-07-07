@@ -5,17 +5,17 @@ export default class Login extends Component {
         return (
             <div className="auth-wrapper">
                 <div className="auth-inner">
-                <form>
+                <form action="http://localhost:8080/login" method="GET">
                     <h3>Log In</h3>
 
                     <div className="form-group">
                         <label>Username</label>
-                        <input type="text" className="form-control" placeholder="Enter username" />
+                        <input type="text" name="username" className="form-control" placeholder="Enter username" />
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" />
+                        <input type="password" name="password" className="form-control" placeholder="Enter password" />
                     </div>
 
                     <div className="form-group">
