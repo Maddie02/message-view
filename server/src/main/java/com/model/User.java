@@ -3,6 +3,7 @@ package com.model;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,26 +19,10 @@ public class User {
     public User(String username, String password) {
         this.username = username;
 
-        String encryptedPass = "";
-        String key = "PaSsEnCrIpTiOn!?";
+        /*BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.password = encoder.encode(password);*/
 
-        try {
-            Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
-            Cipher cipher = Cipher.getInstance("AES");
-
-            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-            byte[] encrypted = cipher.doFinal(password.getBytes());
-            encryptedPass = new String(encrypted);
-            //System.err.println(encryptedPass);
-
-			/*cipher.init(Cipher.DECRYPT_MODE, aesKey);
-			String decrypted = new String(cipher.doFinal(encrypted));
-			System.err.println(decrypted);*/
-        } catch (Exception ex) {
-            System.out.println("Something went wrong!");
-        }
-
-        this.password = encryptedPass;
+        this.password = password;
     }
 
     public ObjectId getId() {
@@ -48,11 +33,25 @@ public class User {
         return username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean validatePassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(password, this.password);
+    }
+
+    public static String encryptPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
     }
 }
