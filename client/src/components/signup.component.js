@@ -22,8 +22,8 @@ export default class SignUp extends Component {
                             Already registered <a href="/">log in?</a>
                         </p>
                 </form>
-              //  </div>
-          //  </div>
+                </div>
+            </div>
         );
     }
 }
