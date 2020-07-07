@@ -53,6 +53,37 @@ public class HelloApplication {
 		response.setHeader("Location","http://localhost:3000/sign-up");
 		response.setStatus(302);
 	}
+	@RequestMapping(value = "/login", method =  RequestMethod.GET)
+	public void loginUser(
+			@RequestParam(value = "username") String username,
+			@RequestParam(value = "password") String password, HttpServletResponse response){
+/*
+		User user = new User(username, password);
+		User user2 = repository.findByUsername(username);
 
+		if (user2 == null) {
+			response.setHeader("Location","http://localhost:3000/sign-up");
+			response.setStatus(302);
+			return;
+		}
+
+		if (user.getPassword().equals(user2.getPassword())) {
+			//log user in
+			//start a session
+
+			response.setHeader("Location","http://localhost:3000/messages");
+			response.setStatus(302);
+			return;
+		}
+
+
+		//System.out.println(encryptedPass);
+		response.setHeader("Location","http://localhost:3000/users");
+		response.setStatus(302);
+
+		 */
+		response.setHeader("Location","http://localhost:3000/messages");
+		response.setStatus(302);
+	}
 
 }
