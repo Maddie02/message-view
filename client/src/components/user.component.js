@@ -19,6 +19,7 @@ export default class UserComponent extends Component {
     render (){
         return (
             <div>
+                <br />
                 <h1 className = "text-center"> Users List</h1>
                 <table className = "table table-striped">
                     <thead>

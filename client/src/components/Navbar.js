@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     return (
+        <div>
         <nav className="navbar navbar-expand-lg navbar-light fixed-top">
             <div className="container">
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -21,6 +22,8 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
+        <br />
+        </div>
     )
 }
 
