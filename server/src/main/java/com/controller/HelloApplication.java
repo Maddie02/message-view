@@ -34,7 +34,7 @@ public class HelloApplication {
 
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public void register(@RequestParam("username") String username, @RequestParam("password") String password,  HttpServletResponse response) {
-		repository.insert(new User(username, User.encryptPassword(password)));
+		repository.insert(new User(username, (password)));
 		response.setHeader("Location","http://localhost:3000");
 		response.setStatus(302);
 	}
