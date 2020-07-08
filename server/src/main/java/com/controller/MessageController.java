@@ -1,18 +1,20 @@
 package com.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.model.EntityState;
 import com.model.Message;
+import com.model.User;
 import com.repository.MessageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -35,5 +37,31 @@ public class MessageController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value="/createMessage", method = RequestMethod.POST)
+    public void createMessage(
+            @RequestParam(value = "messageID") String messageID,
+            @RequestParam(value = "text") String text,
+            @RequestParam(value = "translation") boolean isForTranslation,
+            @RequestParam(value = "documentation") boolean isForDocumentation,
+            HttpServletResponse response)
+    {
+        EntityState state = EntityState.NEW;
+        //User user = <User from Session> for creator and last modifier
+        LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
+        /* TO DO: from where to take this parameters
+        String consistentMessageId = ?
+        String consistentComponentId = ? - component
+        String consistentProjectId = ? - project
+        String version = ? -
+        String messageType = ? - component
+        Map<String, EntityState> views
+        */
+
+        //messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
+
+        response.setHeader("Location","http://localhost:3000");
+        response.setStatus(302);
     }
 }
