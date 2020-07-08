@@ -8,6 +8,11 @@
     margin: auto;
   }  
 
+.add-btn {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .cards {
   margin-top: 10px;
 }
