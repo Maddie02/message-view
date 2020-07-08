@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+@Component
 public class UserService implements UserDetailsService{
     @Autowired
     private UserRepo repository;
