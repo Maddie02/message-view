@@ -20,6 +20,8 @@ function App() {
           <Route path="/log-in" exact component={Login} />
           <Route path="/sign-up" exact component={SignUp} />
           <Route path='/users' component={User} />
+          <Route path='/projects' exact component={Project} />
+          <Route path='/projects/Alfabet' exact component={CurrentProject} />
           <Route path="/messages" exact component={Messages} />
           <Route path="/message/:id" exact component={MessageView} />
         </Switch>
