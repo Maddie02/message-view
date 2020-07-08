@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,9 +24,11 @@ public class ProjectController {
         return ResponseEntity.ok(repository.findAll());
     }
 
-    @GetMapping(value = "/getProjects/{name}")
-    public Project getCurrentProject(@PathVariable(value = "name") String name){
-        return repository.findByProjectName(name);
+    @GetMapping(value = "/getProjects/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Project>> getCurrentProject(@PathVariable(value = "name") String name){
+        List<Project> newList = new ArrayList<Project>();
+        newList.add(repository.findByProjectName(name));
+        return ResponseEntity.ok(newList);
     }
 
 }
