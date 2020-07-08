@@ -71,6 +71,7 @@ public class HelloApplication {
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public void login(HttpServletResponse response) {
+
 		response.setHeader("Location","http://localhost:3000/sign-up");
 		response.setStatus(302);
 	}
