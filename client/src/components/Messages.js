@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid } from '@material-ui/core';
+import { Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
+import CreateIcon from '@material-ui/icons/Create';
 import { Link } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
 import axios from 'axios';
@@ -55,9 +56,16 @@ const Messages = () => {
                 <div>
                     <img className="loader" src={'https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif'} alt="Loading..."></img>
                 </div> :
+                <div>
+                    <div className="add-btn">
+                        <Button variant="contained" color="primary" startIcon={<CreateIcon />}>
+                            ADD MESSAGE
+                        </Button>
+                    </div>
                     <Grid container spacing={3} justify="center">
                         { exerciseList() }
                     </Grid>
+                </div>
                 }
             </div>
         </div>
