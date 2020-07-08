@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Login from "./components/login.component";
 import SignUp from "./components/signup.component";
 import User from "./components/user.component";
+import Project from "./components/project.component";
+import CurrentProject from "./components/currentproject.component";
 import Messages from './components/Messages';
 import MessageView from './components/MessageView';
 
