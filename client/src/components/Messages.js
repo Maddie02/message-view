@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
-import CreateIcon from '@material-ui/icons/Create';
+import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
 import axios from 'axios';
@@ -30,7 +30,7 @@ const Message = props => {
 const Messages = () => {
 
     const [messages, setMessages] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
@@ -58,8 +58,11 @@ const Messages = () => {
                 </div> :
                 <div>
                     <div className="add-btn">
-                        <Button variant="contained" color="primary" startIcon={<CreateIcon />}>
-                            ADD MESSAGE
+                        <Button
+                            variant="contained"
+                            color="primary" 
+                            startIcon={<AddIcon /> }>
+                            <Link className="link-add" to='/add-message'>ADD MESSAGE</Link>
                         </Button>
                     </div>
                     <Grid container spacing={3} justify="center">
