@@ -50,7 +50,7 @@ public class MessageController {
     {
         if(messageRepository.findByMessageID(messageID) != null)return false;
         EntityState state = EntityState.NEW;
-        User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("Toshkooo").getBody()).get(0); //just for testing
+        User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("looo").getBody()).get(0); //just for testing
         //User user = <User from Session> for creator and last modifier
         LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
 
