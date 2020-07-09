@@ -1,11 +1,11 @@
 package com.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.model.EntityState;
 import com.model.Message;
+import com.model.MessageView;
 import com.model.User;
 import com.repository.MessageRepository;
 
@@ -40,28 +40,35 @@ public class MessageController {
     }
 
     @RequestMapping(value="/createMessage", method = RequestMethod.POST)
-    public void createMessage(
+    public boolean createMessage(
             @RequestParam(value = "messageID") String messageID,
             @RequestParam(value = "text") String text,
             @RequestParam(value = "translation") boolean isForTranslation,
             @RequestParam(value = "documentation") boolean isForDocumentation,
+            @RequestParam(value = "messageType") String messageType,
             HttpServletResponse response)
     {
+        if(messageRepository.findByMessageID(messageID) != null)return false;
         EntityState state = EntityState.NEW;
+        User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("Toshkooo").getBody()).get(0); //just for testing
         //User user = <User from Session> for creator and last modifier
         LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
-        /* TO DO: from where to take this parameters
-        String consistentMessageId = ?
-        String consistentComponentId = ? - component
-        String consistentProjectId = ? - project
-        String version = ? -
-        String messageType = ? - component
-        Map<String, EntityState> views
-        */
 
-        //messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
+        String consistentMessageId = "";
+        String consistentComponentId = (new ComponentController()).getComponent_ALF().getConsistentComponentID();
+        String consistentProjectId = Objects.requireNonNull((new ProjectController()).getCurrentProject("Alfabet").getBody()).get(0).getConsistentProjectID();
+        String version = (new ComponentController()).getComponent_ALF().getVersion();
+        Map<String, MessageView> views = new HashMap<String, MessageView>();
+
+
+        messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
+        Message message = messageRepository.findByMessageID(messageID);
+        message.setConsistentMessageID(message.getId());
+        messageRepository.save(message);
+
 
         response.setHeader("Location","http://localhost:3000");
         response.setStatus(302);
+        return true;
     }
 }
