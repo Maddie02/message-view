@@ -163,4 +163,8 @@ public class Message {
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+    
+    public void setConsistentMessageID(String consistentMessageID) {
+        this.consistentMessageID = consistentMessageID;
+    }
 }
