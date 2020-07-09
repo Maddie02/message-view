@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.model.EntityState;
 import com.model.Message;
+import com.model.MessageView;
 import com.model.User;
 import com.repository.MessageRepository;
 
@@ -44,10 +45,12 @@ public class MessageController {
             @RequestParam(value = "text") String text,
             @RequestParam(value = "translation") boolean isForTranslation,
             @RequestParam(value = "documentation") boolean isForDocumentation,
+            @RequestParam(value = "messageType") String messageType,
             HttpServletResponse response)
     {
         if(messageRepository.findByMessageID(messageID) != null)return false;
         EntityState state = EntityState.NEW;
+        User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("Toshkooo").getBody()).get(0); //just for testing
         //User user = <User from Session> for creator and last modifier
         LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
 
@@ -55,16 +58,13 @@ public class MessageController {
         String consistentComponentId = (new ComponentController()).getComponent_ALF().getConsistentComponentID();
         String consistentProjectId = Objects.requireNonNull((new ProjectController()).getCurrentProject("Alfabet").getBody()).get(0).getConsistentProjectID();
         String version = (new ComponentController()).getComponent_ALF().getVersion();
-        /* TO DO: from where to take this parameters
-        String messageType = ? - component
-        */
-        Map<String, EntityState> views = new HashMap<String, EntityState>();
+        Map<String, MessageView> views = new HashMap<String, MessageView>();
 
 
-        /*messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
+        messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
         Message message = messageRepository.findByMessageID(messageID);
         message.setConsistentMessageID(message.getId());
-        messageRepository.save(message);*/
+        messageRepository.save(message);
 
 
         response.setHeader("Location","http://localhost:3000");
