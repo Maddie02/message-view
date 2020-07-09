@@ -94,8 +94,8 @@ const AddMessage = () => {
 
     console.log(data);
 
-    axios.post('http://localhost:8080/createMessage', data)
-         .then(res => console.log(res.data));
+    // axios.post('http://localhost:8080/createMessage', data)
+    //      .then(res => console.log(res.data));
 
     document.getElementById('outlined-basic').value ='';    
     document.getElementById('outlined-basic-text').value ='';
@@ -143,11 +143,13 @@ const AddMessage = () => {
                           required
                           id="outlined-basic"
                           label="messageID"
+                          name="messageID"
                           variant="outlined"
                           onChange={handleMessageIDChange}
                           className={classes.inputs} />
                         <Typography className={classes.inputs} variant="h6" color="textPrimary">For Documentation:
                           <Checkbox
+                            name="documentation"
                             checked={forDocumentation}
                             onChange={handleDocChange}
                             color="primary"
@@ -170,7 +172,7 @@ const AddMessage = () => {
                           >
                             {
                               messageTypes.map(type => {
-                                return <MenuItem key={type} value={type}>
+                                return <MenuItem name="messageType" key={type} value={type}>
                                           {type}
                                       </MenuItem>
                               })
@@ -181,6 +183,7 @@ const AddMessage = () => {
                         <TextField 
                           fullWidth
                           required
+                          name="text"
                           id="outlined-basic-text"
                           label="Text"
                           variant="outlined"
@@ -188,6 +191,7 @@ const AddMessage = () => {
                           className={classes.inputs} />
                         <Typography className={classes.inputs} variant="h6" color="textPrimary">For Translation:
                           <Checkbox
+                            name="translation"
                             checked={forTranslation}
                             onChange={handleTrChange}
                             color="primary"
