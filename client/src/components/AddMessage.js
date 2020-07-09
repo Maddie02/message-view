@@ -1,7 +1,12 @@
-import React from 'react';
-import { Grid, Button } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Grid, Button, Checkbox, Typography, FormControl, MenuItem, Select, InputLabel, Collapse } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,29 +31,178 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
       textAlign: 'center',
-  }
+  },
+  alertMessage: {
+    marginBottom: '5px',
+  },
 }));
 
 const AddMessage = () => {
   const classes = useStyles();
 
+  const [forDocumentation, setForDocumentation] = useState(false);
+  const [forTranslation, setForTranslation] = useState(false);
+  const [version, setVersion] = useState(0);
+  const [messageTypes, setMessageTypes] = useState([]);
+  const [messageType, setMessageType] = useState([]);
+  const [text, setText] = useState('');
+  const [messageID, setMessageID] = useState('');
+  const [openAlert, setOpenAlert] = useState(false);
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/getComponent_ALF')
+         .then(response => {
+           setVersion(response.data.version);
+           setMessageTypes(response.data.messageTypes);
+           setMessageType(response.data.messageTypes[0]);
+           console.log(response.data);
+         })
+         .catch(error => console.log(error));
+  }, [])
+
+  const handleDocChange = event => {
+    setForDocumentation(event.target.checked);
+  }
+
+  const handleTrChange = event => {
+    setForTranslation(event.target.checked);
+  }
+
+  const handleTypeChange = event => {
+    setMessageType(event.target.value);
+  }
+
+  const handleTextChange = event => {
+    setText(event.target.value);
+  }
+
+  const handleMessageIDChange = event => {
+    setMessageID(event.target.value);
+  }
+
+  const onSubmit = event => {
+
+    event.preventDefault();
+
+    const data = {
+      messageType,
+      messageID,
+      text,
+      forDocumentation,
+      forTranslation
+    }
+
+    console.log(data);
+
+    axios.post('http://localhost:8080/createMessage', data)
+         .then(res => console.log(res.data));
+
+    document.getElementById('outlined-basic').value ='';    
+    document.getElementById('outlined-basic-text').value ='';
+    setForTranslation(false);
+    setForDocumentation(false);
+  }
+
   return (
         <div className={classes.createMessage}>
-            <form autoComplete="off">
+          <Collapse in={openAlert}>
+            <Alert
+              className={classes.alertMessage}
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setOpenAlert(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              Succesfully added new message!
+            </Alert>
+          </Collapse>
+            <form autoComplete="off" onSubmit={onSubmit} action="/createMessage" method="POST">
                 <h3 className={classes.title}>Add message</h3>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <TextField fullWidth id="outlined-basic" label="messageID" variant="outlined" className={classes.inputs} />
-                        <TextField fullWidth id="outlined-basic" label="forDocumentation" variant="outlined" className={classes.inputs} />                        
+                        {version ? 
+                        <TextField
+                          disabled
+                          fullWidth
+                          id="outlined-disabled"
+                          label="Version"
+                          defaultValue={version}
+                          variant="outlined"
+                          className={classes.inputs}
+                        /> : <p>Loading...</p> }
+                        <TextField
+                          fullWidth
+                          required
+                          id="outlined-basic"
+                          label="messageID"
+                          variant="outlined"
+                          onChange={handleMessageIDChange}
+                          className={classes.inputs} />
+                        <Typography className={classes.inputs} variant="h6" color="textPrimary">For Documentation:
+                          <Checkbox
+                            checked={forDocumentation}
+                            onChange={handleDocChange}
+                            color="primary"
+                          />
+                        </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField fullWidth id="outlined-basic" label="Text" variant="outlined"className={classes.inputs} />
-                        <TextField fullWidth id="outlined-basic" label="forTranslation" variant="outlined" className={classes.inputs} />
+                      { messageTypes ? 
+                        <FormControl variant="outlined" fullWidth>
+                          <InputLabel id="demo-simple-select-outlined-label">MessageType</InputLabel>
+                          <Select
+                            fullWidth
+                            required
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={messageType}
+                            onChange={handleTypeChange}
+                            label="MessageType"
+                            className={classes.inputs}
+                          >
+                            {
+                              messageTypes.map(type => {
+                                return <MenuItem key={type} value={type}>
+                                          {type}
+                                      </MenuItem>
+                              })
+                            }
+                          </Select>
+                        </FormControl>
+                        : <p>Loading...</p> }
+                        <TextField 
+                          fullWidth
+                          required
+                          id="outlined-basic-text"
+                          label="Text"
+                          variant="outlined"
+                          onChange={handleTextChange}
+                          className={classes.inputs} />
+                        <Typography className={classes.inputs} variant="h6" color="textPrimary">For Translation:
+                          <Checkbox
+                            checked={forTranslation}
+                            onChange={handleTrChange}
+                            color="primary"
+                          />
+                        </Typography>
                     </Grid>
                     <Grid item xs={12} className={classes.submit}>
                         <Button
+                            type="submit"
                             variant="contained"
-                            color="primary">
+                            color="primary"
+                            onClick={() => {
+                              setOpenAlert(true);
+                            }}
+                          >
                             Submit
                         </Button>
                     </Grid>
