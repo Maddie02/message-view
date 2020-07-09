@@ -26,26 +26,6 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @GetMapping("/getMessages")
-    public List<Message> getMessages(HttpServletRequest request, HttpServletResponse response)
-    {
-        String userName = null;
-        Cookie[] cookies = request.getCookies();
-        System.out.println();
-        if(cookies !=null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("username")) userName = cookie.getValue();
-            }
-        }
-        if(userName == null) {
-            response.setHeader("Location","http://localhost:3000/log-in");
-            response.setStatus(302);
-            return null;
-        }else {
-            return messageRepository.findAll();
-        }
-    }
-
     @GetMapping("/messages/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
 

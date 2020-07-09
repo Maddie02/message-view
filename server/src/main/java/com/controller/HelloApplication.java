@@ -1,6 +1,8 @@
 package com.controller;
 
+import com.model.Message;
 import com.model.User;
+import com.repository.MessageRepository;
 import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,6 +26,8 @@ import static com.model.User.encryptPassword;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class HelloApplication {
+	@Autowired
+	private MessageRepository messageRepository;
 
 	@Autowired
 	private UserRepo repository;
@@ -98,8 +102,28 @@ public class HelloApplication {
 	}
 
 
+	@GetMapping("/getMessages")
+	public List<Message> getMessages(HttpServletRequest request, HttpServletResponse response)
+	{
+		String userName = null;
+		Cookie[] cookies = request.getCookies();
+		System.out.println();
+		if(cookies !=null){
+			for(Cookie cookie : cookies){
+				if(cookie.getName().equals("username")) userName = cookie.getValue();
+			}
+		}
+		if(userName == null) {
+			response.setHeader("Location","http://localhost:3000/log-in");
+			response.setStatus(302);
+			return null;
+		}else {
+			return messageRepository.findAll();
+		}
+	}
+
 	@GetMapping("/login")
-	public boolean login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response, HttpSession session) {
+	public boolean login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) {
 		User user = repository.findByUsername(username);
 		if (user == null) {
 			//show a message "this user doest exist or smth like that"
