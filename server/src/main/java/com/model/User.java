@@ -15,10 +15,10 @@ public class User {
 
     public User(String username, String password) {
         this.username = username;
-
-        /*BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        this.password = encoder.encode(password);*/
-
+/*
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.password = encoder.encode(password);
+*/
         this.password = password;
     }
 

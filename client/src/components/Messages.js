@@ -48,18 +48,6 @@ const Messages = () => {
     }
 
     return (
-      <%@ page language="java" contentType="text/html; charset=US-ASCII"
-    pageEncoding="US-ASCII"%>
-      <%
-        String userName = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies !=null){
-          for(Cookie cookie : cookies){
-    	       if(cookie.getName().equals("username")) userName = cookie.getValue();
-           }
-         }
-         if(userName == null) response.sendRedirect("/log-in");
-       %>
         <div className="cards">
             <br />
             <div className="container">

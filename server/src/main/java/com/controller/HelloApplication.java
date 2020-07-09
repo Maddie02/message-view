@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.model.User.encryptPassword;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,9 +34,21 @@ public class HelloApplication {
 	}
 
 	@GetMapping(value = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<User>> getUsers(HttpSession session) {
-
-		return ResponseEntity.ok(repository.findAll());
+	public ResponseEntity<List<User>> getUsers(HttpServletResponse response, HttpServletRequest request) {
+		String userName = null;
+		Cookie[] cookies = request.getCookies();
+		if(cookies !=null){
+			for(Cookie cookie : cookies){
+				if(cookie.getName().equals("username")) userName = cookie.getValue();
+			}
+		}
+		if(userName == null) {
+			response.setHeader("Location","http://localhost:3000/log-in");
+			response.setStatus(302);
+			return null;
+		}else {
+			return ResponseEntity.ok(repository.findAll());
+		}
 	}
 
 	@GetMapping(value = "/createUser")
@@ -43,7 +58,15 @@ public class HelloApplication {
 
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public void register(@RequestParam("username") String username, @RequestParam("password") String password,  HttpServletResponse response) {
-		repository.insert(new User(username, (password)));
+
+		repository.insert(new User(username, encryptPassword(password)));
+
+		//show a message "successful log in"
+		Cookie loginCookie = new Cookie("username", username);
+		//setting cookie to expiry in 30 mins
+		loginCookie.setMaxAge(30*60);
+		response.addCookie(loginCookie);
+
 		response.setHeader("Location","http://localhost:3000/messeges");
 		response.setStatus(302);
 	}
@@ -97,6 +120,8 @@ public class HelloApplication {
 		//setting cookie to expiry in 30 mins
 		loginCookie.setMaxAge(30*60);
 		response.addCookie(loginCookie);
+
+		System.out.println(loginCookie.getValue());
 		response.setHeader("Location","http://localhost:3000/messages");
 		response.setStatus(302);
 		return true;
