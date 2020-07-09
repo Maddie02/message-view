@@ -124,7 +124,7 @@ const AddMessage = () => {
               Succesfully added new message!
             </Alert>
           </Collapse>
-            <form autoComplete="off" onSubmit={onSubmit} action="/createMessage" method="POST">
+            <form autoComplete="off" action="http://localhost:8080/createMessage" method="POST">
                 <h3 className={classes.title}>Add message</h3>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -147,14 +147,13 @@ const AddMessage = () => {
                           variant="outlined"
                           onChange={handleMessageIDChange}
                           className={classes.inputs} />
-                        <Typography className={classes.inputs} variant="h6" color="textPrimary">For Documentation:
+                        <Typography display="inline" name="documentation" className={classes.inputs} variant="h6" color="textPrimary">For Documentation:</Typography>
                           <Checkbox
-                            name="documentation"
+                          	name="documentation" 
                             checked={forDocumentation}
                             onChange={handleDocChange}
                             color="primary"
                           />
-                        </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       { messageTypes ? 
@@ -168,11 +167,12 @@ const AddMessage = () => {
                             value={messageType}
                             onChange={handleTypeChange}
                             label="MessageType"
+                            name="messageType"
                             className={classes.inputs}
                           >
                             {
                               messageTypes.map(type => {
-                                return <MenuItem name="messageType" key={type} value={type}>
+                                return <MenuItem key={type} value={type}>
                                           {type}
                                       </MenuItem>
                               })
@@ -189,14 +189,13 @@ const AddMessage = () => {
                           variant="outlined"
                           onChange={handleTextChange}
                           className={classes.inputs} />
-                        <Typography className={classes.inputs} variant="h6" color="textPrimary">For Translation:
+                        <Typography display="inline" name="translation" className={classes.inputs} variant="h6" color="textPrimary">For Translation:</Typography>
                           <Checkbox
-                            name="translation"
+                            name="translation" 
                             checked={forTranslation}
                             onChange={handleTrChange}
                             color="primary"
                           />
-                        </Typography>
                     </Grid>
                     <Grid item xs={12} className={classes.submit}>
                         <Button
