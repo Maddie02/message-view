@@ -3,12 +3,12 @@ package com.controller;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.model.EntityState;
-import com.model.Message;
-import com.model.MessageView;
-import com.model.User;
+import com.model.*;
+import com.repository.ComponentRepository;
 import com.repository.MessageRepository;
 
+import com.repository.ProjectRepo;
+import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +22,26 @@ public class MessageController {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private ComponentRepository componentRepository;
+
+    @Autowired
+    private ProjectRepo projectRepository;
+
+    @Autowired
+    private UserRepo userRepository;
+
+    public Project getCurrentProject(String name){
+        return projectRepository.findByProjectName(name);
+    }
+    public Component getComponent_ALFABET() {
+        return componentRepository.findByComponentName("FastLane");
+    }
+
+    public User getCurrentUser(String name){
+        return userRepository.findByUsername(name);
+    }
 
     @GetMapping("/getMessages")
     public List<Message> getMessages() {
@@ -43,29 +63,30 @@ public class MessageController {
     public boolean createMessage(
             @RequestParam(value = "messageID") String messageID,
             @RequestParam(value = "text") String text,
-            @RequestParam(value = "translation") boolean isForTranslation,
-            @RequestParam(value = "documentation") boolean isForDocumentation,
+            @RequestParam(value = "translation", defaultValue="false") Boolean isForTranslation,
+            @RequestParam(value = "documentation", defaultValue="false") Boolean isForDocumentation,
             @RequestParam(value = "messageType") String messageType,
+
             HttpServletResponse response)
     {
+        //String messageType = "StringType";
         if(messageRepository.findByMessageID(messageID) != null)return false;
         EntityState state = EntityState.NEW;
-        User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("looo").getBody()).get(0); //just for testing
+        //User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("vanya").getBody()).get(0); //just for testing
         //User user = <User from Session> for creator and last modifier
+        User user = getCurrentUser("looo");
         LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
 
         String consistentMessageId = "";
-        String consistentComponentId = (new ComponentController()).getComponent_ALF().getConsistentComponentID();
-        String consistentProjectId = Objects.requireNonNull((new ProjectController()).getCurrentProject("Alfabet").getBody()).get(0).getConsistentProjectID();
-        String version = (new ComponentController()).getComponent_ALF().getVersion();
+        String consistentComponentId = getComponent_ALFABET().getConsistentComponentID();
+        String consistentProjectId = getCurrentProject("Alfabet").getConsistentProjectID();
+        String version = getComponent_ALFABET().getVersion();
         Map<String, MessageView> views = new HashMap<String, MessageView>();
-
 
         messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
         Message message = messageRepository.findByMessageID(messageID);
         message.setConsistentMessageID(message.getId());
         messageRepository.save(message);
-
 
         response.setHeader("Location","http://localhost:3000");
         response.setStatus(302);
