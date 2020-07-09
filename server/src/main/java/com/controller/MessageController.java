@@ -1,10 +1,7 @@
 package com.controller;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.model.EntityState;
 import com.model.Message;
@@ -55,20 +52,19 @@ public class MessageController {
         LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
 
         String consistentMessageId = "";
+        String consistentComponentId = (new ComponentController()).getComponent_ALF().getConsistentComponentID();
+        String consistentProjectId = Objects.requireNonNull((new ProjectController()).getCurrentProject("Alfabet").getBody()).get(0).getConsistentProjectID();
+        String version = (new ComponentController()).getComponent_ALF().getVersion();
         /* TO DO: from where to take this parameters
-        String consistentComponentId = ? - component
-        String consistentProjectId = ? - project
-        String version = ? -
         String messageType = ? - component
         */
-
         Map<String, EntityState> views = new HashMap<String, EntityState>();
 
 
-        //messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
+        /*messageRepository.insert(new Message(consistentMessageId, consistentComponentId, consistentProjectId, messageID, text, version, messageType, state, isForDocumentation, isForTranslation, views, user.getUsername(), date, user.getUsername(), date)); //insert into collection
         Message message = messageRepository.findByMessageID(messageID);
         message.setConsistentMessageID(message.getId());
-        messageRepository.save(message);
+        messageRepository.save(message);*/
 
 
         response.setHeader("Location","http://localhost:3000");
