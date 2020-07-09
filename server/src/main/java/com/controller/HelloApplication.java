@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.model.Project;
 import com.model.User;
 import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,6 +27,13 @@ public class HelloApplication {
 	@GetMapping(value = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getUsers(){
 		return ResponseEntity.ok(repository.findAll());
+	}
+
+	@GetMapping(value = "/getUsers/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> getCurrentUser(@PathVariable(value = "name") String name){
+		List<User> newList = new ArrayList<User>();
+		newList.add(repository.findByUsername(name));
+		return ResponseEntity.ok(newList);
 	}
 
 	@GetMapping(value = "/createUser")
