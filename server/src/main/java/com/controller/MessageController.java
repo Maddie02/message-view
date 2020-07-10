@@ -26,29 +26,20 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @GetMapping("/messages/{id}")
-    public ResponseEntity<Message> getMessageById(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/getMessages")
+    public List<Message> getMessages(HttpServletRequest request, HttpServletResponse response)
+    {
+        return messageRepository.findAll();
+    }
 
-        String userName = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies !=null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("username")){
-                    userName = cookie.getValue();
-                }
-            }
-        }
-        if(userName == null) {
-            response.setHeader("Location","http://localhost:3000/log-in");
-            response.setStatus(302);
-            return null;
-        }else {
-            Optional<Message> messageData = messageRepository.findById(id);
-            if (messageData.isPresent()) {
-                return new ResponseEntity<>(messageData.get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+    @GetMapping("/messages/{id}")
+    public ResponseEntity<Message> getMessageById(@PathVariable("id") String id) {
+        Optional<Message> messageData = messageRepository.findById(id);
+
+        if (messageData.isPresent()) {
+            return new ResponseEntity<>(messageData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

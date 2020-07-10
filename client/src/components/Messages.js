@@ -27,7 +27,6 @@ const Message = props => {
 }
 
 const Messages = () => {
-
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 

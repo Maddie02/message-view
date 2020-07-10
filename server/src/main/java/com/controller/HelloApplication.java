@@ -105,21 +105,7 @@ public class HelloApplication {
 	@GetMapping("/getMessages")
 	public List<Message> getMessages(HttpServletRequest request, HttpServletResponse response)
 	{
-		String userName = null;
-		Cookie[] cookies = request.getCookies();
-		System.out.println();
-		if(cookies !=null){
-			for(Cookie cookie : cookies){
-				if(cookie.getName().equals("username")) userName = cookie.getValue();
-			}
-		}
-		if(userName == null) {
-			response.setHeader("Location","http://localhost:3000/log-in");
-			response.setStatus(302);
-			return null;
-		}else {
 			return messageRepository.findAll();
-		}
 	}
 
 	@GetMapping("/login")
@@ -138,14 +124,7 @@ public class HelloApplication {
 			response.setStatus(302);
 			return false;
 		}
-
-		//show a message "successful log in"
-		Cookie loginCookie = new Cookie("username", username);
-		//setting cookie to expiry in 30 mins
-		loginCookie.setMaxAge(30*60);
-		response.addCookie(loginCookie);
-
-		System.out.println(loginCookie.getValue());
+		//show a message "successful login"
 		response.setHeader("Location","http://localhost:3000/messages");
 		response.setStatus(302);
 		return true;
