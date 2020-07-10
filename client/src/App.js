@@ -10,6 +10,7 @@ import Project from "./components/project.component";
 import CurrentProject from "./components/currentproject.component";
 import Messages from './components/Messages';
 import MessageView from './components/MessageView';
+import AddMessage from './components/AddMessage';
 
 function App() {
   return ( 
@@ -26,6 +27,7 @@ function App() {
           <Route path='/projects/Alfabet' exact component={CurrentProject} />
           <Route path="/messages" exact component={Messages} />
           <Route path="/message/:id" exact component={MessageView} />
+          <Route path="/add-message" exact component={AddMessage} />
         </Switch>
       </div>
     </Router>

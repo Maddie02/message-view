@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import ProjectService from '../services/ProjectService';
 
 export default class CurrentProjectComponent extends Component {

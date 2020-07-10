@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
-
+    public Message findByMessageID(String messageID);
+    public Message findByConsistentMessageID(String consistentMessageID);
 }
