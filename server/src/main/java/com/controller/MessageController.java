@@ -88,7 +88,7 @@ public class MessageController {
         message.setConsistentMessageID(message.getId());
         messageRepository.save(message);
 
-        response.setHeader("Location","http://localhost:3000");
+        response.setHeader("Location","http://localhost:3000/messages");
         response.setStatus(302);
         return true;
     }
@@ -96,6 +96,8 @@ public class MessageController {
     @RequestMapping(value="/deleteMessage/{id}", method = RequestMethod.GET)
     public boolean deleteMessage(@PathVariable(name="id") String consistentMessageID, HttpServletResponse response){
         if(messageRepository.findByConsistentMessageID(consistentMessageID) == null)return false;
+        User user = getCurrentUser("looo");
+        if(!user.getUsername().equals(messageRepository.findByConsistentMessageID(consistentMessageID).getCreatedBy()))return false;
         messageRepository.delete(messageRepository.findByConsistentMessageID(consistentMessageID));
         return true;
     }
