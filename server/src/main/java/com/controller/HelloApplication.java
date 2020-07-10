@@ -100,13 +100,7 @@ public class HelloApplication {
 		response.setHeader("Location","http://localhost:3000/sign-up");
 		response.setStatus(302);
 	}
-
-
-	@GetMapping("/getMessages")
-	public List<Message> getMessages(HttpServletRequest request, HttpServletResponse response)
-	{
-			return messageRepository.findAll();
-	}
+	
 
 	@GetMapping("/login")
 	public boolean login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) {

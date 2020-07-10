@@ -26,8 +26,10 @@ public class UserController {
     @GetMapping("/api/user")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
+            System.out.println("fine");
             return new ResponseEntity<>("", HttpStatus.OK);
         } else {
+            System.out.println("not fine");
             return ResponseEntity.ok().body(user.getAttributes());
         }
     }
