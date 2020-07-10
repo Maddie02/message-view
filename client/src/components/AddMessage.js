@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button, Checkbox, Typography, FormControl, MenuItem, Select, InputLabel, Collapse } from '@material-ui/core';
+import { Grid, Button, Typography, FormControl, MenuItem, Select, InputLabel, Collapse } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   alertMessage: {
     marginBottom: '5px',
   },
+  checkbox: {
+    zoom: '1.5',
+    marginLeft: '10px',
+  }
 }));
 
 const AddMessage = () => {
@@ -148,13 +152,14 @@ const AddMessage = () => {
                           onChange={handleMessageIDChange}
                           className={classes.inputs} />
                         <Typography display="inline" name="documentation" className={classes.inputs} variant="h6" color="textPrimary">For Documentation:</Typography>
-                          <input
-                          	type="checkbox"
-                          	name="documentation" 
-                            checked={forDocumentation}
-                            onChange={handleDocChange}
-                            color="primary"
-                          />
+                        <input
+                          className={classes.checkbox}
+                          type="checkbox"
+                          name="documentation" 
+                          checked={forDocumentation}
+                          onChange={handleDocChange}
+                          color="primary"
+                        />
                     </Grid>
                     <Grid item xs={6}>
                       { messageTypes ? 
@@ -192,6 +197,7 @@ const AddMessage = () => {
                           className={classes.inputs} />
                         <Typography display="inline" name="translation" className={classes.inputs} variant="h6" color="textPrimary">For Translation:</Typography>
                           <input type="checkbox"
+                            className={classes.checkbox}
                             name="translation" 
                             checked={forTranslation}
                             onChange={handleTrChange}
