@@ -148,7 +148,8 @@ const AddMessage = () => {
                           onChange={handleMessageIDChange}
                           className={classes.inputs} />
                         <Typography display="inline" name="documentation" className={classes.inputs} variant="h6" color="textPrimary">For Documentation:</Typography>
-                          <Checkbox
+                          <input
+                          	type="checkbox"
                           	name="documentation" 
                             checked={forDocumentation}
                             onChange={handleDocChange}
@@ -190,7 +191,7 @@ const AddMessage = () => {
                           onChange={handleTextChange}
                           className={classes.inputs} />
                         <Typography display="inline" name="translation" className={classes.inputs} variant="h6" color="textPrimary">For Translation:</Typography>
-                          <Checkbox
+                          <input type="checkbox"
                             name="translation" 
                             checked={forTranslation}
                             onChange={handleTrChange}
