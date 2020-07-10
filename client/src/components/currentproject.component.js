@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import ProjectService from '../services/ProjectService';
 
 export default class CurrentProjectComponent extends Component {
-
-    constructor(props){
+	
+    constructor(props, props1){
         super(props)
         this.state = {
             projects:[]
         }
+        this.props1 = props;
     }
-
+	
     componentDidMount(){
-        ProjectService.getProject("Alfabet").then((response) => {
-            this.setState({ projects: response.data})
-        });
-    }
+        ProjectService.getProject(`${this.props.match.params.type}`).then((response) => {
+			this.setState({ projects: response.data})
+		});
+	}
 
     render (){
         return (
