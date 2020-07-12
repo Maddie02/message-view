@@ -93,7 +93,7 @@ public class MessageController {
         return true;
     }
 
-    @RequestMapping(value="/deleteMessage/{id}", method = RequestMethod.GET)
+    @RequestMapping(value="/deleteMessage/{id}", method = RequestMethod.DELETE)
     public boolean deleteMessage(@PathVariable(name="id") String consistentMessageID, HttpServletResponse response){
         if(messageRepository.findByConsistentMessageID(consistentMessageID) == null)return false;
         User user = getCurrentUser("looo");
