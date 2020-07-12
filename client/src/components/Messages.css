@@ -8,6 +8,19 @@
     margin: auto;
   }  
 
+/* .link {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.link:hover {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.view:hover {
+  text-decoration: none;
+} */
+
 .link-add {
   color: white;
 }
