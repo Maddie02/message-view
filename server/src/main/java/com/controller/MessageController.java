@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -10,6 +11,8 @@ import com.repository.MessageRepository;
 import com.repository.ProjectRepo;
 import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +47,21 @@ public class MessageController {
     }
 
     @GetMapping("/getMessages")
-    public List<Message> getMessages() {
+    public List<Message> getMessages(HttpServletResponse response) throws IOException {
+        if(messageRepository.count() > 20)response.sendRedirect("http://localhost:8080/getMessages/0");
         return messageRepository.findAll();
+    }
+
+    @GetMapping("/getMessages/{number}")
+    public List<Message> getLimitedMessages(@PathVariable(name = "number") Integer number, HttpServletResponse response) throws IOException {
+        if(messageRepository.count() <= 20)response.sendRedirect("http://localhost:8080/getMessages");
+        number--;
+        if(number < 0)number = 0;
+        if(messageRepository.count()/20 < number){
+            number = Math.toIntExact(messageRepository.count() / 20);
+        }
+        Pageable pageableRequest = PageRequest.of(number, 20);
+        return messageRepository.findAll(pageableRequest).getContent();
     }
 
     @GetMapping("/messages/{id}")
@@ -69,13 +85,11 @@ public class MessageController {
 
             HttpServletResponse response)
     {
-        //String messageType = "StringType";
         if(messageRepository.findByMessageID(messageID) != null)return false;
         EntityState state = EntityState.NEW;
-        //User user = Objects.requireNonNull((new HelloApplication()).getCurrentUser("vanya").getBody()).get(0); //just for testing
         //User user = <User from Session> for creator and last modifier
         User user = getCurrentUser("looo");
-        LocalDateTime date = LocalDateTime.now(); //for created Date and last modified Date
+        LocalDateTime date = LocalDateTime.now();
 
         String consistentMessageId = "";
         String consistentComponentId = getComponent_ALFABET().getConsistentComponentID();
@@ -94,11 +108,15 @@ public class MessageController {
     }
 
     @RequestMapping(value="/deleteMessage/{id}", method = RequestMethod.DELETE)
-    public boolean deleteMessage(@PathVariable(name="id") String consistentMessageID, HttpServletResponse response){
-        if(messageRepository.findByConsistentMessageID(consistentMessageID) == null)return false;
+    public boolean deleteMessage(@PathVariable(name="id") String consistentMessageID, HttpServletResponse response) throws IOException {
+        if(messageRepository.findByConsistentMessageID(consistentMessageID) == null){
+            response.sendRedirect("http://localhost:3000/messages/" + consistentMessageID);
+            return false;
+        }
         User user = getCurrentUser("looo");
         if(!user.getUsername().equals(messageRepository.findByConsistentMessageID(consistentMessageID).getCreatedBy()))return false;
         messageRepository.delete(messageRepository.findByConsistentMessageID(consistentMessageID));
+        response.sendRedirect("http://localhost:3000/messages/");
         return true;
     }
 
