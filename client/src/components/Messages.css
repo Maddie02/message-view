@@ -8,7 +8,7 @@
     margin: auto;
   }  
 
-/* .link {
+.link {
   color: rgba(0, 0, 0, 0.8);
 }
 
@@ -19,7 +19,7 @@
 
 .view:hover {
   text-decoration: none;
-} */
+}
 
 .link-add {
   color: white;
