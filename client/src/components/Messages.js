@@ -3,10 +3,26 @@ import { Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import './Messages.css';
 
 const Message = props => {
+
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+    }
+
+    const handleClose = () => {
+        setOpenDialog(false);
+    }
 
     return (
         <Grid item component={Card} xs={12} md={3} sm={6} className="card">
@@ -19,9 +35,39 @@ const Message = props => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <span className="btn btn-default">
-                    <Link to={`/message/${props.message.id}`}>View</Link>
-                </span>
+                <Button
+                    variant="outlined"
+                    color="primary">
+                    <Link className="view" to={`/message/${props.message.id}`}>VIEW</Link>
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="default"
+                    startIcon={<DeleteIcon />}
+                    onClick={handleClickOpen}>
+                        DELETE
+                </Button>
+                <Dialog
+                    open={openDialog}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete that message?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            This action will permanently delete the message with id of {props.message.id}.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Close
+                        </Button>
+                        <Button onClick={() => { props.deleteMessage(props.message.id)}} color="primary">
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </CardActions>
         </Grid>
     );
@@ -44,8 +90,16 @@ const Messages = () => {
 
     const exerciseList = () => {
         return messages.map(currentMessage => {
-            return <Message message={currentMessage} key={currentMessage.id} />
+            return <Message message={currentMessage} deleteMessage={deleteMessage} key={currentMessage.id} />
         })
+    }
+
+    const deleteMessage = id => {
+        axios.delete(`http://localhost:8080/deleteMessage/${id}`)
+             .then(response => console.log(response.data))
+             .catch(error => console.log(error));
+            
+        setMessages(messages.filter(element => element.id !== id));
     }
 
     return (
