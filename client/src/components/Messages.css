@@ -42,3 +42,12 @@
 .card {
     margin: 2% 2% !important;
 }
+
+.pagination-bar {
+  display: flex;
+  background-color: white;
+  margin-top: 10px;
+  padding: 5px 0;
+  margin-right: auto;
+  justify-content: center;
+}
