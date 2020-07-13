@@ -48,7 +48,7 @@ public class MessageController {
 
     @GetMapping("/getMessages")
     public List<Message> getMessages(HttpServletResponse response) throws IOException {
-        if(messageRepository.count() > 20)response.sendRedirect("http://localhost:8080/getMessages/0");
+        if(messageRepository.count() > 20)response.sendRedirect("http://localhost:8080/getMessages/1");
         return messageRepository.findAll();
     }
 
