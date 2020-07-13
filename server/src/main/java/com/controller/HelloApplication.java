@@ -1,6 +1,5 @@
 package com.controller;
 
-import com.model.Project;
 import com.model.User;
 import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,6 @@ public class HelloApplication {
 	@Autowired
 	private UserRepo repository;
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello %s!", name);
-	}
-
 	@GetMapping(value = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getUsers(){
 		return ResponseEntity.ok(repository.findAll());
@@ -36,16 +30,17 @@ public class HelloApplication {
 		return ResponseEntity.ok(newList);
 	}
 
-	@GetMapping(value = "/createUser")
-	public void createUser(@RequestParam(value = "name", defaultValue = "Gosho") String name, @RequestParam(value = "pass", defaultValue = "Tosho") String pass) {
-		repository.insert(new User(name, pass));
-	}
-
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public void register(@RequestParam("username") String username, @RequestParam("password") String password,  HttpServletResponse response) {
+	public boolean register(@RequestParam("username") String username, @RequestParam("password") String password,  HttpServletResponse response) {
+		if(repository.findByUsername(username) != null){
+			response.setHeader("Location","http://localhost:3000/log-in");
+			response.setStatus(302);
+			return false;
+		}
 		repository.insert(new User(username, User.encryptPassword(password)));
 		response.setHeader("Location","http://localhost:3000");
 		response.setStatus(302);
+		return true;
 	}
 
 	@RequestMapping(value="/register", method = RequestMethod.GET)
@@ -80,7 +75,7 @@ public class HelloApplication {
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public void login(HttpServletResponse response) {
-		response.setHeader("Location","http://localhost:3000/sign-up");
+		response.setHeader("Location","http://localhost:3000/log-in");
 		response.setStatus(302);
 	}
 }
