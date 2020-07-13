@@ -31,9 +31,9 @@ export default class UserComponent extends Component {
                     <tbody>
                         {
                             this.state.users.map(
-                                user => 
-                                <tr key = {user.username}> 
-                                     <td> {user.username}</td>   
+                                user =>
+                                <tr key = {user.username}>
+                                     <td> {user.username}</td>
                                 </tr>
                             )
                         }

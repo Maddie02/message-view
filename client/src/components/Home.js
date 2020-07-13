@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { withCookies } from 'react-cookie';
+import axios from 'axios';
 
 class Home extends Component {
   state = {
@@ -13,6 +14,9 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
+     this.state = {
+          body:""
+      }
     const {cookies} = props;
     this.state.csrfToken = cookies.get('XSRF-TOKEN');
     this.login = this.login.bind(this);
@@ -20,22 +24,26 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    const response = await fetch('/api/user', {credentials: 'include'});
-    const body = await response.text();
-    console.log(body);
-    if (body === '') {
+
+    const response = axios.get('http://localhost:8080/login')
+    .then((response) => {
+        this.setState({ body: response.data})
+    });
+    console.log(this.state.body)
+    if (this.state.body === '') {
       this.setState(({isAuthenticated: false}))
     } else {
-      this.setState({isAuthenticated: true, user: JSON.parse(body)})
+      this.setState({isAuthenticated: true, user: JSON.parse(this.state.body)})
+
     }
   }
 
   login() {
     let port = (window.location.port ? ':' + window.location.port : '');
-    if (port === ':3000') {
+  /*  if (port === ':3000') {
       port = ':8080';
-    }
-    window.location.href = '//' + window.location.hostname + port + '/private';
+    } */
+    window.location.href = '//' + window.location.hostname + port + '/sign-up';
   }
 
   logout() {
@@ -54,7 +62,7 @@ class Home extends Component {
 
     const button = this.state.isAuthenticated ?
       <div>
-        <Button color="link"><Link to="/groups">Manage JUG Tour</Link></Button>
+        <Button color="link"><Link to="/users">Manage JUG Tour</Link></Button>
         <br/>
         <Button color="link" onClick={this.logout}>Logout</Button>
       </div> :

@@ -3,13 +3,13 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { CookiesProvider } from 'react-cookie';
 
-import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Login from "./components/login.component";
 import SignUp from "./components/signup.component";
 import User from "./components/user.component";
 import Messages from './components/Messages';
 import MessageView from './components/MessageView';
+import Home from './components/Home';
 
 function App() {
   return (

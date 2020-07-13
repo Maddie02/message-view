@@ -5,7 +5,7 @@ export default class Login extends Component {
         return (
             <div className="auth-wrapper">
                 <div className="auth-inner">
-                <form action="http://localhost:8080/login" method="GET">
+                <form action="http://localhost:8080/login" method="POST">
                     <h3>Log In</h3>
 
                     <div className="form-group">

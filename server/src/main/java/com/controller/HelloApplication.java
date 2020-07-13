@@ -5,9 +5,11 @@ import com.model.User;
 import com.repository.MessageRepository;
 import com.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,20 +42,7 @@ public class HelloApplication {
 
 	@GetMapping(value = "/getUsers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> getUsers(HttpServletResponse response, HttpServletRequest request) {
-		String userName = null;
-		Cookie[] cookies = request.getCookies();
-		if(cookies !=null){
-			for(Cookie cookie : cookies){
-				if(cookie.getName().equals("username")) userName = cookie.getValue();
-			}
-		}
-		if(userName == null) {
-			response.setHeader("Location","http://localhost:3000/log-in");
-			response.setStatus(302);
-			return null;
-		}else {
-			return ResponseEntity.ok(repository.findAll());
-		}
+		return ResponseEntity.ok(repository.findAll());
 	}
 
 	@GetMapping(value = "/createUser")
@@ -100,29 +90,49 @@ public class HelloApplication {
 		response.setHeader("Location","http://localhost:3000/sign-up");
 		response.setStatus(302);
 	}
-	
 
-	@GetMapping("/login")
-	public boolean login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) {
+	@GetMapping("/api/user")
+	public ResponseEntity<?> getUser(@AuthenticationPrincipal User user) {
+		if (user == null) {
+			return new ResponseEntity<>("", HttpStatus.OK);
+
+		} else {
+			return ResponseEntity.ok().body(user);
+
+		}
+	}
+
+    @RequestMapping(value="/login", method = RequestMethod.POST)
+	public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) throws IOException {
 		User user = repository.findByUsername(username);
 		if (user == null) {
 			//show a message "this user doest exist or smth like that"
 
 			response.setHeader("Location","http://localhost:3000/log-in");
 			response.setStatus(302);
-			return false;
+			return new ResponseEntity<>("", HttpStatus.OK);
 		}
-		if(!user.validatePassword(password)){
+		if(!user.validatePassword(password)) {
 			//show a message "wrong password"
-			response.setHeader("Location","http://localhost:3000/log-in");
+			response.setHeader("Location", "http://localhost:3000/log-in");
 			response.setStatus(302);
-			return false;
+			return new ResponseEntity<>("", HttpStatus.OK);
 		}
 		//show a message "successful login"
-		response.setHeader("Location","http://localhost:3000/messages");
-		response.setStatus(302);
-		return true;
+		Cookie loginCookie = new Cookie("username", username);
+		//setting cookie to expiry in 30 mins
+		loginCookie.setMaxAge(30*60);
+		response.addCookie(loginCookie);
+
+
+		response.sendRedirect("http://localhost:3000");
+/*
+		response.setHeader("Location","http://localhost:3000");
+		response.setStatus(302); */
+		return ResponseEntity.ok().body(username);
 	}
+
+}
 
 /*
 	@RequestMapping(value = "/login", method =  RequestMethod.POST)
@@ -159,5 +169,5 @@ public class HelloApplication {
 
 		response.setHeader("Location","http://localhost:3000/sign-up");
 		response.setStatus(302);
-	}*/
-}
+	}
+	*/

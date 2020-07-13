@@ -1,12 +1,16 @@
 import axios from 'axios'
 
 const USERS_REST_API_URL = 'http://localhost:8080/getUsers';
+const USER_REST_API_URL = 'http://localhost:8080/api/user';
 
 class UserService {
 
-    getUsers(){
-        return axios.get(USERS_REST_API_URL);
-    }
-}
+      getUsers(){
+          return axios.get(USERS_REST_API_URL);
+      }
+      getUser(){
+          return axios.get(USER_REST_API_URL);
+      }
+  }
 
 export default new UserService();
