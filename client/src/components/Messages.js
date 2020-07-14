@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import CardActions from '@material-ui/core/CardActions';
 import DeleteIcon from '@material-ui/icons/Delete';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -37,7 +39,8 @@ const Message = props => {
             <CardActions>
                 <Button
                     variant="outlined"
-                    color="primary">
+                    color="primary"
+                    startIcon={<VisibilityIcon />}>
                     <Link className="view" to={`/message/${props.message.id}`}>VIEW</Link>
                 </Button>
                 <Button
@@ -77,16 +80,17 @@ const Messages = () => {
 
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    
     useEffect(() => {
         setIsLoading(true);
-        axios.get('http://localhost:8080/getMessages')
+        axios.get(`http://localhost:8080/getMessages/${currentPage}`)
              .then(response => {
                  setMessages(response.data);
                  setIsLoading(false);
                 })
              .catch(error => console.log(error));
-    }, [])
+    }, [currentPage])
 
     const exerciseList = () => {
         return messages.map(currentMessage => {
@@ -100,6 +104,10 @@ const Messages = () => {
              .catch(error => console.log(error));
             
         setMessages(messages.filter(element => element.id !== id));
+    }
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
     }
 
     return (
@@ -122,6 +130,14 @@ const Messages = () => {
                     <Grid container spacing={3} justify="center">
                         { exerciseList() }
                     </Grid>
+                    <div className="pagination-bar">
+                        <Pagination 
+                            page={currentPage}
+                            count={195}
+                            onChange={handlePageChange}
+                            color="primary"
+                        />
+                    </div>
                 </div>
                 }
             </div>
